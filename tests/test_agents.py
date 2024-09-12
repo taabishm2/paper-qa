@@ -27,6 +27,7 @@ from paperqa.agents.tools import (
     GatherEvidence,
     GenerateAnswer,
     PaperSearch,
+    make_status,
 )
 from paperqa.docs import Docs
 from paperqa.settings import AgentSettings, Settings
@@ -121,14 +122,14 @@ async def test_successful_memory_agent() -> None:
             " ampicillin\n\nThe gen_answer tool output is visible to the user, so"
             " you do not need to restate the answer and can simply terminate if"
             " the answer looks sufficient. The current status of"
-            " evidence/papers/cost is Status: Paper Count=0 | Relevant Papers=0 |"
-            " Current Evidence=0 | Current Cost=$0.00\n\nTool request message ''"
+            " evidence/papers/cost is Status: "
+            f"{make_status(total_paper_count=0, relevant_paper_count=0, evidence_count=0, cost=0.0)}"  # Started 0
+            "\n\nTool request message ''"
             f" for tool call: {memory_id} with content"
             " 'paper_search(query='Acinetobacter lwoffii antibiotic resistance"
-            " evolution', min_year='None', max_year='None')'\n\nTool response"
-            " message 'Status: Paper Count=11 | Relevant Papers=0 | Current"
-            f" Evidence=0 | Current Cost=$0.0000' for tool call ID {memory_id} of"
-            " tool 'paper_search'"
+            " evolution', min_year='None', max_year='None')'\n\nTool response message '"
+            f"{make_status(total_paper_count=11, relevant_paper_count=0, evidence_count=0, cost=0.0)}"  # Found 11
+            f"' for tool call ID {memory_id} of tool 'paper_search'"
         ),
         input=(
             "Use the tools to answer the question: Q: Acinetobacter lwoffii has"
@@ -138,8 +139,8 @@ async def test_successful_memory_agent() -> None:
             " ampicillin\n\nThe gen_answer tool output is visible to the user, so"
             " you do not need to restate the answer and can simply terminate if the"
             " answer looks sufficient. The current status of evidence/papers/cost"
-            " is Status: Paper Count=0 | Relevant Papers=0 | Current Evidence=0 |"
-            " Current Cost=$0.0000"
+            " is Status: "
+            f"{make_status(total_paper_count=0, relevant_paper_count=0, evidence_count=0, cost=0.0)}"
         ),
         output=(
             f"Tool request message '' for tool call: {memory_id} with content"
